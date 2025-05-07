@@ -1,0 +1,23 @@
+ FROM python:3.12-bookworm
+
+# Set environment variables for Python and Django
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    DJANGO_SETTINGS_MODULE=myproject.settings
+
+# Set working directory in the container
+WORKDIR /API-PROJECT
+
+# Copy requirements.txt and install dependencies
+COPY ./requirements.txt /requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r /requirements.txt
+
+# Copy the Django project
+COPY ./myproject /API-PROJECT/
+
+# Expose port 8000 for Django's development server
+EXPOSE 8000
+
+# Run Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
