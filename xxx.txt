@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Define project name (optional, for Docker Compose)
+PROJECT_NAME=lms_deploy
+
+echo "🚀 Starting deployment..."
+
+# Step 1: Build and start services
+echo "🔧 Building and starting Docker containers..."
+docker-compose -p $PROJECT_NAME up --build -d
+
+# Step 2: Wait for services to be healthy
+echo "⏳ Waiting for services to be healthy..."
+
+# Wait for DB container
+until [ "$(docker inspect --format='{{.State.Health.Status}}' ${PROJECT_NAME}_db_1)" == "healthy" ]; do
+    echo "📦 Waiting for database to be healthy..."
+    sleep 5
+done
+
+# Wait for backend container
+until [ "$(docker inspect --format='{{.State.Health.Status}}' ${PROJECT_NAME}_backend_1)" == "healthy" ]; do
+    echo "🧠 Waiting for backend to be healthy..."
+    sleep 5
+done
+
+# Wait for frontend container
+until [ "$(docker inspect --format='{{.State.Health.Status}}' ${PROJECT_NAME}_frontend_1)" == "healthy" ]; do
+    echo "🖥️ Waiting for frontend to be healthy..."
+    sleep 5
+done
+
+# Step 3: Show status
+echo "✅ All services are up and healthy!"
+docker-compose -p $PROJECT_NAME ps
+
+# Optional: Follow logs
+echo "📜 Attaching to logs (Press Ctrl+C to detach)"
+docker-compose -p $PROJECT_NAME logs -f

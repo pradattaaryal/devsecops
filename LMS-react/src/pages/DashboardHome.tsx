@@ -32,14 +32,14 @@ const DashboardHome: React.FC = () => {
         setLoading(true);
         
         // Fetch dashboard data
-        const dashboardResponse = await fetch('http://127.0.0.1:8000/dashboard/');
+        const dashboardResponse = await fetch(`${import.meta.env.VITE_API_URL}/dashboard/`);
         if (!dashboardResponse.ok) {
           throw new Error(`Failed to fetch dashboard data. Status: ${dashboardResponse.status}`);
         }
         const dashboardResult = await dashboardResponse.json();
         
         // Fetch overdue borrowers
-        const overdueResponse = await fetch('http://127.0.0.1:8000/dashboard/GetOverdueBorrowers');
+        const overdueResponse = await fetch(`${import.meta.env.VITE_API_URL}/dashboard/GetOverdueBorrowers`);
         if (!overdueResponse.ok) {
           throw new Error(`Failed to fetch overdue borrowers. Status: ${overdueResponse.status}`);
         }

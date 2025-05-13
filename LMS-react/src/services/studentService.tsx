@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Student } from "../types/index";
 
-const API_URL = "http://127.0.0.1:8000/students/students/";
+const API_URL = `${import.meta.env.VITE_API_URL}/students/students/`;
 
 export const fetchAllStudents = async () => {
   try {

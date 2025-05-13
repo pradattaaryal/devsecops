@@ -13,7 +13,7 @@ interface AuthContextType {
 
 //Context here
 const AuthContext = createContext<AuthContextType | null>(null)
-
+const url=import.meta.env.VITE_API_URL
 // Auth Provider
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<string | null>(null)
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/users/login/", {
+      const response = await axios.post(`${url}/users/login/`, {
         user_name: username,
         password: password,
       })

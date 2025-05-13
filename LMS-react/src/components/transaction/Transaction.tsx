@@ -22,7 +22,7 @@ const Transaction = () => {
     const fetchTransactions = async () => {
       try {
         setLoading(true);
-        const response = await axios.get<TransactionData[]>('http://127.0.0.1:8000/transactions/');
+        const response = await axios.get<TransactionData[]>(`${import.meta.env.VITE_API_URL}/transactions/`);
         setTransactions(response.data);
       } catch (err) {
         setError('Failed to fetch transactions');
